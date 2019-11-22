@@ -1,6 +1,13 @@
 from flask import Flask, render_template
 
-app = Flask(__name__, template_folder="templates")
+import connexion
+
+# app = Flask(__name__, template_folder="templates")
+
+# We create the 'app' using Connexion rather that Flask. Internally the 
+# Flask app exists, but now has additional functionality added to it
+
+app = connexion.App(__name__, specification_dir='./')
 
 @app.route('/')
 def home():
