@@ -21,6 +21,14 @@ PEOPLE = {
         "time":get_timestamp()
     },
 
+
+    "Jumbi":{
+        "fname": "John",
+        "lname": "Jjumbi",
+        "time":get_timestamp()
+    },
+
+    
     "Lesner":{
         "fname": "Brock",
         "lname": "Lesner",
@@ -29,7 +37,7 @@ PEOPLE = {
 }
 
 # Create a function to handle the 'GET' HTTP Protocol
-def read():
+def read_all():
     """
     This function responds to a request for /api/people with
     the complete list of people.
