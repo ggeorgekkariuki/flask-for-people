@@ -82,3 +82,28 @@ paths:
                 type: string
               timestamp:
                 type: string
+
+  /people:
+    post:
+      operationId: "people.create"
+      tags:
+        - people
+      summary: Create a person and add it to the people list
+      description: Create a person and add it to the people list
+      parameters:
+        - name: person
+          in: body
+          description: Person to create
+          required: True
+          schema:
+            type: object
+            properties:
+              fname:
+                type: string
+                description: First name of person to create
+              lname:
+                type: string
+                description: Last name of person to create
+        responses:
+          201:
+            description: Successfully created person in list

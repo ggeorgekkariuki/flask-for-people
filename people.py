@@ -38,7 +38,7 @@ PEOPLE = {
     }
 }
 
-# Create a function to handle the 'GET' HTTP Protocol
+# Create a function to handle the 'GET' HTTP Protocol for all and one person
 def read_all():
     """
     This function responds to a request for /api/people with
@@ -64,3 +64,31 @@ def read_one(lname):
         )
 
     return person
+
+# Create a function for 'POST' HTTP Protocol
+def create(person):
+    """
+    This function creates a new person in the people structure
+
+    :param person:  person to create in people structure
+    :return:        201 o success, 406 on person exists
+    """
+    lname = person.get("lname", None)
+    fname = person.get("fname", None)
+
+    # Does the person exist? If no
+    if lname not in PEOPLE and lname is not None:
+        PEOPLE[lname] = {
+            "lname": lname,
+            "fname": fname,
+            "timestamp": datetime.now()
+        }
+        return make_response(
+            "{lname} successfully created".format(lname=lname), 201
+        )
+    # if yes...
+    else:
+        abort(
+            406, 
+            "Person with the last name {lname} already exists".format(lname=lname)
+        )
