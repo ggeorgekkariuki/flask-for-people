@@ -113,3 +113,22 @@ def update(lname, person):
             404,
             "Person with last name {lname} not found.".format(lname=lname)
         )
+
+def delete(lname):
+    """
+    This function deletes a person from the people structure
+
+    :param lname:   last name of the person to delete
+    :return:        200 on successful delete, 404 if not found
+    """
+    # Does the last name exist
+    if lname in PEOPLE:
+        del PEOPLE[lname]
+        return make_response(
+            "{lname} successfully deleted.".format(lname=lname), 200
+        )
+    else:
+        abort(
+            404,
+            "Person with last name {lname} not found.".format(lname=lname)
+        )
