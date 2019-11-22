@@ -1,0 +1,46 @@
+# This file contains all the info to configure the web server to
+# provide input parameter validation
+# output response data validation
+# URL endpoint definition
+# and the Swagger UI
+
+# Ensure this file has been pointed to in the main app via
+# app.add_api('swagger.yml')
+
+# This file defines the GET protocal with url path '/api/people'
+
+swagger: "2.0"
+
+info:
+  description: This is the swagger file that goes with our server code
+  version: "1.0.0"
+  title: Swagger REST Article
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+
+basePath: "/api"
+
+# Paths supported by the server application
+paths:
+  /people:
+    get:
+      operationId: "people.read"
+      tags:
+        - "People"
+      summary: "The people data structure supported by the server application"
+      description: "Read the list of people"
+      responses:
+        200:
+          description: "Successful read people list operation"
+          schema:
+            type: "array"
+            items:
+              properties:
+                fname:
+                  type: "string"
+                lname:
+                  type: "string"
+                timestamp:
+                  type: "string"
