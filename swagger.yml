@@ -30,7 +30,7 @@ paths:
     get:
       operationId: "people.read_all"
       tags:
-        - "People"
+        - "people"
       summary: "The people data structure supported by the server application"
       description: "Read the entire list of people"
       parameters:
@@ -62,7 +62,7 @@ paths:
     get:
       operationId: "people.read_one"
       tags: 
-        - "People"
+        - "people"
       summary: Read one person from the list
       description: Read one person from the list
       parameters:
@@ -104,6 +104,6 @@ paths:
               lname:
                 type: string
                 description: Last name of person to create
-        responses:
-          201:
-            description: Successfully created person in list
+      responses:
+        201:
+          description: Successfully created person in list
