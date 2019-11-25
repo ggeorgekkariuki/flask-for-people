@@ -30,7 +30,7 @@ paths:
     get:
       operationId: "people.read_all"
       tags:
-        - "People"
+        - "people"
       summary: "The people data structure supported by the server application"
       description: "Read the entire list of people"
       parameters:
