@@ -1,36 +1,35 @@
 /*
-* The JavaScript file for the single page application
-*/
+ * JavaScript file for the application to demonstrate
+ * using the API
+ */
 
 // Create the namespace instance
 let ns = {};
 
-// Create a model instance
-ns.model = (function(){
+// Create the model instance
+ns.model = (function() {
     'use strict';
 
     let $event_pump = $('body');
 
-    //return the API
+    // Return the API
     return {
-        'read': function(){
+        'read': function() {
             let ajax_options = {
                 type: 'GET',
                 url: 'api/people',
                 accepts: 'application/json',
                 dataType: 'json'
             };
-
             $.ajax(ajax_options)
-            .done(function(data){
+            .done(function(data) {
                 $event_pump.trigger('model_read_success', [data]);
             })
-            .fail(function(xhr, textStatus, errorThrown){
+            .fail(function(xhr, textStatus, errorThrown) {
                 $event_pump.trigger('model_error', [xhr, textStatus, errorThrown]);
             })
         },
-
-        'create': function(){
+        create: function(fname, lname) {
             let ajax_options = {
                 type: 'POST',
                 url: 'api/people',
@@ -42,17 +41,15 @@ ns.model = (function(){
                     'lname': lname
                 })
             };
-
             $.ajax(ajax_options)
-            .done(function(data){
+            .done(function(data) {
                 $event_pump.trigger('model_create_success', [data]);
             })
-            .fail(function(xhr, textStatus, errorThrown){
+            .fail(function(xhr, textStatus, errorThrown) {
                 $event_pump.trigger('model_error', [xhr, textStatus, errorThrown]);
-            })            
+            })
         },
-
-        'update': function(fname, lname){
+        update: function(fname, lname) {
             let ajax_options = {
                 type: 'PUT',
                 url: 'api/people/' + lname,
@@ -64,29 +61,26 @@ ns.model = (function(){
                     'lname': lname
                 })
             };
-
             $.ajax(ajax_options)
-            .done(function(data){
+            .done(function(data) {
                 $event_pump.trigger('model_update_success', [data]);
             })
-            .fail(function(xhr, textStatus, errorThrown){
+            .fail(function(xhr, textStatus, errorThrown) {
                 $event_pump.trigger('model_error', [xhr, textStatus, errorThrown]);
             })
         },
-
-        'delete': function(lname){
+        'delete': function(lname) {
             let ajax_options = {
                 type: 'DELETE',
-                url: 'api/people/'+lname,
-                accepts:'application/json',
-                contentType:'plain/text'
+                url: 'api/people/' + lname,
+                accepts: 'application/json',
+                contentType: 'plain/text'
             };
-
             $.ajax(ajax_options)
-            .done(function(data){
+            .done(function(data) {
                 $event_pump.trigger('model_delete_success', [data]);
             })
-            .fail(function(xhr, textStatus, errorThrown){
+            .fail(function(xhr, textStatus, errorThrown) {
                 $event_pump.trigger('model_error', [xhr, textStatus, errorThrown]);
             })
         }
@@ -97,46 +91,38 @@ ns.model = (function(){
 ns.view = (function() {
     'use strict';
 
-    let fname = $('#fname'),
-        lname = $('#lname')
+    let $fname = $('#fname'),
+        $lname = $('#lname');
 
-    //return the api
-    return{
-        reset: function(){
+    // return the API
+    return {
+        reset: function() {
             $lname.val('');
             $fname.val('').focus();
         },
-
         update_editor: function(fname, lname) {
             $lname.val(lname);
             $fname.val(fname).focus();
         },
-
-        build_table: function(people){
-            let rows = '';
+        build_table: function(people) {
+            let rows = ''
 
             // clear the table
-            $('.people table > tbody').empty(); 
+            $('.people table > tbody').empty();
 
-            if (people){
-                for(let i=0, l=people.length; i < l; i++) {
-                    rows += `<tr>
-                    <td class="fname">${people[i].fname}</td>
-                    <td class="lname">${people[i].lname}</td>
-                    <td>${people[i].timestamp}</td>
-                    </tr>`;
+            // did we get a people array?
+            if (people) {
+                for (let i=0, l=people.length; i < l; i++) {
+                    rows += `<tr><td class="fname">${people[i].fname}</td><td class="lname">${people[i].lname}</td><td>${people[i].timestamp}</td></tr>`;
                 }
-
-                $('table > tbody').append(rows)
+                $('table > tbody').append(rows);
             }
-
         },
-
-        error: function(error_msg){
+        error: function(error_msg) {
             $('.error')
                 .text(error_msg)
                 .css('visibility', 'visible');
-            setTimeout(function(){
+            setTimeout(function() {
                 $('.error').css('visibility', 'hidden');
             }, 3000)
         }
@@ -144,68 +130,67 @@ ns.view = (function() {
 }());
 
 // Create the controller
-ns.controller = (function(m, v){
+ns.controller = (function(m, v) {
     'use strict';
 
     let model = m,
         view = v,
         $event_pump = $('body'),
-        $fname = $('fname'),
-        $lname = $('lname');
+        $fname = $('#fname'),
+        $lname = $('#lname');
 
-     // Get the data from the model after the controller is done initialising
-    setTimeout(function(){
+    // Get the data from the model after the controller is done initializing
+    setTimeout(function() {
         model.read();
-    }, 100) 
+    }, 100)
 
     // Validate input
-    function validate(fname, lname){
+    function validate(fname, lname) {
         return fname !== "" && lname !== "";
-    } 
+    }
 
     // Create our event handlers
-    $('#create').click(function(e){
+    $('#create').click(function(e) {
         let fname = $fname.val(),
             lname = $lname.val();
 
         e.preventDefault();
 
-        if (validate(fname, lname)){
+        if (validate(fname, lname)) {
             model.create(fname, lname)
         } else {
-            alert('Problem with the first or last name input.');
+            alert('Problem with first or last name input');
         }
     });
 
-    $('#update').click(function(e){
+    $('#update').click(function(e) {
         let fname = $fname.val(),
             lname = $lname.val();
 
         e.preventDefault();
 
-        if (validate(fname, lname)){
-            model.create(fname, lname)
+        if (validate(fname, lname)) {
+            model.update(fname, lname)
         } else {
-            alert('Problem with the first or last name input.');
+            alert('Problem with first or last name input');
         }
-
         e.preventDefault();
     });
 
-    $('#delete').click(function(e){
+    $('#delete').click(function(e) {
         let lname = $lname.val();
 
         e.preventDefault();
 
-        if (validate('placeholder', lname)){
+        if (validate('placeholder', lname)) {
             model.delete(lname)
-        }else{
-            alert('Problem with first or last name input')
+        } else {
+            alert('Problem with first or last name input');
         }
         e.preventDefault();
     });
 
-    $('#reset').click(function(){
+    $('#reset').click(function() {
         view.reset();
     })
 
